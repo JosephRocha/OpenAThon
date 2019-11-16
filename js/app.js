@@ -16,19 +16,6 @@ function retrieveUser(){
     return cognitoUser;
 }
 
-function retrieveData(token){
-  $.ajax({
-          url: "https://fmo0lm1z4l.execute-api.us-east-1.amazonaws.com/prod/item",
-          type: "GET",
-          datatype: 'json',
-          crossDomain: true,
-          contentType: 'application/json',
-          headers: {"Authorization": token},
-          success: function (data) {
-              console.log("got data")
-          }
-      });
-}
 
 function logout(){
   var cognitoUser = retrieveUser();
@@ -44,7 +31,6 @@ function main(){
     window.location.replace("signin.html");
   }
   document.body.innerHTML = document.body.innerHTML.replace(/\{username\}/g, "@"+cognitoUser.username);
-  retrieveData(cognitoUser.signInUserSession.idToken.jwtToken);
 }
 
 main();
