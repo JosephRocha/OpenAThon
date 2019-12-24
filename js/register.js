@@ -1,4 +1,4 @@
-function registerUser(username, email, password){
+function registerUser(email, password){
   var poolData = { UserPoolId : 'us-east-1_0EX0SzGKU',
       ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
   };
@@ -47,12 +47,11 @@ function displaySuccessMessage(){
 
 $('form').submit(function (event){
   event.preventDefault();
-  var username = jQuery("#username").val();
-  var email = jQuery("#email").val();
+  var email = jQuery("#email").val().toLowerCase();
   var password = jQuery("#password").val();
   var confirmPassword = jQuery("#confirmPassword").val();
   if(password == confirmPassword){
-    registerUser(username, email, password);
+    registerUser(email, password);
   }else{
     displayErrorMessage("Password confirmation does not match password.")
   }
