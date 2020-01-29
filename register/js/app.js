@@ -12,33 +12,66 @@ if (cognitoUser != null) {
             window.location.replace("signin.html");
         }
     });
+}else{
+    window.location.replace("signin.html");
 }
 
 document.body.innerHTML = document.body.innerHTML.replace(/\{username\}/g, cognitoUser.signInUserSession.idToken.payload.email);
 
-  $.ajax({
-        url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/search",
-        type: "POST",
-        data: JSON.stringify({"body": {"accessToken": cognitoUser.signInUserSession.accessToken.jwtToken}}), 
-        datatype: "json",
-        crossDomain: true,
-        contentType: 'application/json',
-        success: function (data) {
-            if(data['body']['Item']){
+var UserInfo = null
+
+fetch('https://api.rowdyhacks.io/v1/search',{
+    method: 'POST',
+    headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({"accessToken": cognitoUser.signInUserSession.accessToken.jwtToken}),
+}).then((response) => response.json())
+  .then((responseJson) =>{
+      console.log(responseJson);
+       if(responseJson['body']['Item']){
+                UserInfo = responseJson['body']['Item'];
                 ReactDOM.render(statusDisplay, document.getElementById('root'));
             }else{
-                const element = <MyForm name="Sara" />;
+                const element = <MyForm/>;
                 ReactDOM.render(element, document.getElementById('root'));
             }
-            console.log(data);
-        }
-  });
-
+   })
+  .catch((error) => {
+      console.error(error);
+    });
 
 class MyForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+        firstname: props.firstname,
+        lastname: props.lastname,
+        shirtsize: props.shirtsize,
+        school: props.school,
+        major: props.major,
+        classification: props.classification,
+        pronouns: props.pronouns,
+        ethnicity: props.ethnicity,
+        travel: props.travel,
+        dietaryinfo: props.dietaryinfo,
+        accomodations: props.accomodations,
+        track:props.track,
+        lookingforwardto: props.lookingforwardto
+    }
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+    
+  handleChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   handleSubmit(event) {
@@ -67,7 +100,6 @@ class MyForm extends React.Component {
         crossDomain: true,
         contentType: 'application/json',
         success: function (data) {
-            alert("Your application has been successfully received!");
             window.location.replace("index.html");
         }
     });
@@ -87,17 +119,17 @@ class MyForm extends React.Component {
             <h1 className="h3 mb-3 font-weight-normal">RowdyHacks 2020 Application</h1>
             
             <label htmlFor="firstname">First Name</label>
-            <input id="firstname" className="form-control" placeholder="First Name" required autoFocus/>
+            <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} required autoFocus/>
             <br/>
             
             <label htmlFor="lastname">Last Name</label>
-            <input id="lastname" className="form-control" placeholder="Last Name" required autoFocus/>
+            <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} required autoFocus/>
             <br/>
             
             
             <div className="form-group">
             <label htmlFor="shirtsize">Shirt Size</label>
-            <select id="shirtsize" className="form-control">
+            <select name="shirtsize" id="shirtsize" className="form-control" value={this.state.shirtsize} onChange={this.handleChange} >
                 <option>XXS</option>
                 <option>XS</option>
                 <option>S</option>
@@ -113,24 +145,24 @@ class MyForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="school">What school do you attend?</label>
-            <input id="school" className="form-control" placeholder="What school do you attend?" required autoFocus/>
+            <input name="school" id="school" className="form-control" placeholder="What school do you attend?" value={this.state.school} onChange={this.handleChange}  required autoFocus/>
             </div>
             <br/>
             
             <div className="form-group">
             <label htmlFor="major">What is your major?</label>
-            <input id="major" className="form-control" placeholder="What is your major?" required autoFocus/>
+            <input name="major" id="major" className="form-control" placeholder="What is your major?" value={this.state.major} onChange={this.handleChange} required autoFocus/>
             </div>
             <br/>
             
             <div className="form-group">
             <label htmlFor="classification">What is your most current level of study?</label>
-            <select id="classification" className="form-control">
+            <select name="classification" id="classification" className="form-control" value={this.state.classification} onChange={this.handleChange} >
                 <option>Freshman</option>
                 <option>Sophomore</option>
                 <option>Junior</option>
                 <option>Senior</option>
-                <option>Master's Student</option>
+                <option>Masters Student</option>
                 <option>PhD Student</option>
             </select>
             </div>
@@ -138,7 +170,7 @@ class MyForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="pronouns">What are your preferred pronouns?</label>
-            <select id="pronouns" className="form-control">
+            <select name="pronouns" id="pronouns" className="form-control" value={this.state.pronouns} onChange={this.handleChange} >
                 <option>She/Her</option>
                 <option>He/Him</option>
                 <option>They/Them</option>
@@ -148,7 +180,7 @@ class MyForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="ethnicity">How do you ethnically identify?</label>
-            <select id="ethnicity" className="form-control">
+            <select name="ethnicity" id="ethnicity" className="form-control" value={this.state.ethnicity} onChange={this.handleChange} >
                 <option>American Indian or Alaskan Native</option>
                 <option>Asian</option>
                 <option>Black or African-American</option>
@@ -162,7 +194,7 @@ class MyForm extends React.Component {
               
             <div className="form-group">
             <label htmlFor="travel">How do you plan to travel to RowdyHacks this year?</label>
-            <select id="travel" className="form-control">
+            <select name="travel" id="travel" className="form-control" value={this.state.travel} onChange={this.handleChange} >
                 <option>Driving</option>
                 <option>Charter Bus</option>
                 <option>Walking</option>
@@ -175,25 +207,25 @@ class MyForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="dietaryinfo">Do you have any dietary restrictions?</label>
-            <textarea id="dietaryinfo" className="form-control" rows="3"></textarea>
+            <textarea name="dietaryinfo" id="dietaryinfo" className="form-control" rows="3" value={this.state.dietaryinfo} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
             
             <div className="form-group">
             <label htmlFor="accomodations">We want all of our hackers to be as rowdy as possible! Are there any other accommodations you might need?</label>
-            <textarea id="accomodations" className="form-control" rows="3"></textarea>
+            <textarea name="accomodations" id="accomodations" className="form-control" rows="3" value={this.state.accomodations} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
             
             <div className="form-group">
             <label htmlFor="exampleFormControlFile1">Please Upload a copy of your resume</label>
-            <input type="file" className="form-control-file" id="exampleFormControlFile1"/>
+            <input name="file" type="file" className="form-control-file" id="exampleFormControlFile1"/>
             </div>
             <br/>
              
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
-            <select id="track" className="form-control">
+            <select name="track" id="track" className="form-control" value={this.state.track} onChange={this.handleChange} >
                 <option>Learner</option>
                 <option>Security</option>
                 <option>Social Good</option>
@@ -204,7 +236,7 @@ class MyForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="lookingforwardto">What are you looking forward to about RowdyHacks this year?</label>
-            <textarea id="lookingforwardto" className="form-control" rows="3"></textarea>
+            <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
             
@@ -234,6 +266,12 @@ class MyForm extends React.Component {
   }
 }
 
+function editApplication(){
+    console.log(UserInfo);
+     var editForm = <MyForm firstname={UserInfo.firstname.S} lastname={UserInfo.lastname.S} shirtsize={UserInfo.shirtsize.S} school={UserInfo.school.S} major={UserInfo.major.S} classification={UserInfo.classification.S} pronouns={UserInfo.pronouns.S} ethnicity={UserInfo.ethnicity.S} travel={UserInfo.travel.S} dietaryinfo={UserInfo.dietaryinfo.S} accomodations={UserInfo.accomodations.S} track={UserInfo.track.S} lookingforwardto={UserInfo.lookingforwardto.S} />;
+     ReactDOM.render(editForm, document.getElementById('root'));
+}
+
 
 const statusDisplay = (
  <div className="card shadow bg-white rounded">
@@ -242,8 +280,8 @@ const statusDisplay = (
             You may check the status of your application at any time here. Once a decision has been made you will receive an email.
             <br/>
             <br/>
-            <button type="button" className="btn btn-primary">Edit Application</button>
-            <small id="emailHelp" className="form-text text-muted">For support please contact: *insert support email here*</small>
+            <button type="button" className="btn btn-primary" onClick={editApplication}>Edit Application</button>
+            <small id="emailHelp" className="form-text text-muted">For support please contact: team@rowdyhacks.org</small>
         </div>
  </div>
 );
