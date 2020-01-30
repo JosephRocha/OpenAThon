@@ -5,16 +5,17 @@ class ApplicationForm extends React.Component {
         this.state = {
             firstname: props.firstname,
             lastname: props.lastname,
+            gender: props.gender,
             shirtsize: props.shirtsize,
             school: props.school,
             major: props.major,
             classification: props.classification,
-            pronouns: props.pronouns,
             ethnicity: props.ethnicity,
             travel: props.travel,
             dietaryinfo: props.dietaryinfo,
-            accomodations: props.accomodations,
             track:props.track,
+            joke: props.joke,
+            firsthear: props.firsthear,
             lookingforwardto: props.lookingforwardto
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,16 +42,17 @@ class ApplicationForm extends React.Component {
                                            "userId": cognitoUser.username,
                                            "firstname": jQuery("#firstname").val(),
                                            "lastname": jQuery("#lastname").val(),
+                                           "gender": jQuery("#gender").val(),
                                            "shirtsize": jQuery("#shirtsize").val(),
                                            "school": jQuery("#school").val(),
                                            "major": jQuery("#major").val(),
                                            "classification": jQuery("#classification").val(),
-                                           "pronouns": jQuery("#pronouns").val(),
                                            "ethnicity": jQuery("#ethnicity").val(),
                                            "travel": jQuery("#travel").val(),
                                            "dietaryinfo": jQuery("#dietaryinfo").val(),
-                                           "accomodations": jQuery("#accomodations").val(),
                                            "track": jQuery("#track").val(),
+                                           "joke": jQuery("#joke").val(),
+                                           "firsthear": jQuery("#firsthear").val(),
                                            "lookingforwardto": jQuery("#lookingforwardto").val(),
                                           }}),
             datatype: "json",
@@ -75,16 +77,16 @@ class ApplicationForm extends React.Component {
             <h1 className="h3 mb-3 font-weight-normal">RowdyHacks 2020 Application</h1>
 
             <label htmlFor="firstname">What is your first name?</label>
-            <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} required autoFocus/>
+            <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname || ''} onChange={this.handleChange} required autoFocus/>
             <br/>
 
             <label htmlFor="lastname">What is your last name?</label>
-            <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} required autoFocus/>
+            <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname || ''} onChange={this.handleChange} required autoFocus/>
             <br/>
             
             <div className="form-group">
-            <label htmlFor="pronouns">What gender do you identify as?</label>
-            <select name="pronouns" id="pronouns" className="form-control" value={this.state.pronouns} onChange={this.handleChange} >
+            <label htmlFor="gender">What gender do you identify as?</label>
+            <select name="gender" id="gender" className="form-control" value={this.state.gender || ''} onChange={this.handleChange} >
             <option>Male</option>
             <option>Female</option>
             <option>Non-binary</option>
@@ -95,7 +97,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="shirtsize">What is your shirt size?</label>
-            <select name="shirtsize" id="shirtsize" className="form-control" value={this.state.shirtsize} onChange={this.handleChange} >
+            <select name="shirtsize" id="shirtsize" className="form-control" value={this.state.shirtsize || ''} onChange={this.handleChange} >
             <option>XXS</option>
             <option>XS</option>
             <option>S</option>
@@ -111,19 +113,19 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="school">What school do you attend?</label>
-            <input name="school" id="school" className="form-control" placeholder="What school do you attend?" value={this.state.school} onChange={this.handleChange}  required autoFocus/>
+            <input name="school" id="school" className="form-control" placeholder="What school do you attend?" value={this.state.school || ''} onChange={this.handleChange}  required autoFocus/>
             </div>
             <br/>
 
             <div className="form-group">
             <label htmlFor="major">What is your major?</label>
-            <input name="major" id="major" className="form-control" placeholder="What is your major?" value={this.state.major} onChange={this.handleChange} required autoFocus/>
+            <input name="major" id="major" className="form-control" placeholder="What is your major?" value={this.state.major || ''} onChange={this.handleChange} required autoFocus/>
             </div>
             <br/>
 
             <div className="form-group">
             <label htmlFor="classification">What is your most current level of study?</label>
-            <select name="classification" id="classification" className="form-control" value={this.state.classification} onChange={this.handleChange} >
+            <select name="classification" id="classification" className="form-control" value={this.state.classification || ''} onChange={this.handleChange} >
             <option>Freshman</option>
             <option>Sophomore</option>
             <option>Junior</option>
@@ -136,7 +138,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="ethnicity">How do you ethnically identify?</label>
-            <select name="ethnicity" id="ethnicity" className="form-control" value={this.state.ethnicity} onChange={this.handleChange} >
+            <select name="ethnicity" id="ethnicity" className="form-control" value={this.state.ethnicity || ''} onChange={this.handleChange} >
             <option>American Indian or Alaskan Native</option>
             <option>Asian</option>
             <option>Black or African-American</option>
@@ -150,7 +152,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="travel">How do you plan to travel to RowdyHacks this year?</label>
-            <select name="travel" id="travel" className="form-control" value={this.state.travel} onChange={this.handleChange} >
+            <select name="travel" id="travel" className="form-control" value={this.state.travel || ''} onChange={this.handleChange} >
             <option>Driving</option>
             <option>Charter Bus</option>
             <option>Walking</option>
@@ -163,7 +165,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="dietaryinfo">Do you have any dietary restrictions?</label>
-            <textarea name="dietaryinfo" id="dietaryinfo" className="form-control" rows="3" value={this.state.dietaryinfo} onChange={this.handleChange} ></textarea>
+            <textarea name="dietaryinfo" id="dietaryinfo" className="form-control" rows="3" value={this.state.dietaryinfo || ''} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
 
@@ -175,7 +177,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
-            <select name="track" id="track" className="form-control" value={this.state.track} onChange={this.handleChange} >
+            <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} >
             <option>Learner</option>
             <option>Security</option>
             <option>Social Good</option>
@@ -185,14 +187,14 @@ class ApplicationForm extends React.Component {
             <br/>
             
             <div className="form-group">
-            <label htmlFor="techjoke">We want all of our hackers to be as rowdy as possible! What is your best tech joke?</label>
-            <textarea name="techjoke" id="lookingforwardto" className="form-control" rows="3" value={this.state.techjoke} onChange={this.handleChange} ></textarea>
+            <label htmlFor="joke">We want all of our hackers to be as rowdy as possible! Tell us your best tech joke.</label>
+            <textarea name="joke" id="joke" className="form-control" rows="3" value={this.state.joke || ''} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
             
             <div className="form-group">
-            <label htmlFor="travel">How did you first hear about RowdyHacks?</label>
-            <select name="travel" id="travel" className="form-control" value={this.state.travel} onChange={this.handleChange} >
+            <label htmlFor="firsthear">How did you first hear about RowdyHacks?</label>
+            <select name="firsthear" id="firsthear" className="form-control" value={this.state.firsthear || ""} onChange={this.handleChange} >
             <option>Major League Hacking</option>
             <option>Social Media</option>
             <option>ACM Meeting</option>
@@ -206,7 +208,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="lookingforwardto">Why do you want to attend RowdyHacks?</label>
-            <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto} onChange={this.handleChange} ></textarea>
+            <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto || ''} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
 
@@ -283,6 +285,7 @@ fetch('https://api.rowdyhacks.io/v1/search', {
             UserInfo = responseJson['body']['Item'];
             ReactDOM.render(statusDisplay, document.getElementById('root'));
         }else{
+            console.log(responseJson);
             const element = <ApplicationForm/>;
             ReactDOM.render(element, document.getElementById('root'));
         }
@@ -291,17 +294,18 @@ fetch('https://api.rowdyhacks.io/v1/search', {
 function editApplication(){
     console.log(UserInfo);
     var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
-    lastname={UserInfo.lastname.S} 
+    lastname={UserInfo.lastname.S}
+    gender={UserInfo.gender.S} 
     shirtsize={UserInfo.shirtsize.S} 
     school={UserInfo.school.S} 
     major={UserInfo.major.S} 
     classification={UserInfo.classification.S} 
-    pronouns={UserInfo.pronouns.S} 
     ethnicity={UserInfo.ethnicity.S} 
     travel={UserInfo.travel.S} 
     dietaryinfo={UserInfo.dietaryinfo.S} 
-    accomodations={UserInfo.accomodations.S} 
     track={UserInfo.track.S} 
+    joke={UserInfo.joke.S} 
+    firsthear={UserInfo.firsthear.S} 
     lookingforwardto={UserInfo.lookingforwardto.S}/>;
     ReactDOM.render(editForm, document.getElementById('root'));
 }
