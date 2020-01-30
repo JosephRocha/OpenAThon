@@ -74,27 +74,17 @@ class ApplicationForm extends React.Component {
 
             <h1 className="h3 mb-3 font-weight-normal">RowdyHacks 2020 Application</h1>
 
-            <label htmlFor="firstname">What is your first name?</label>
+            <label htmlFor="firstname">First Name</label>
             <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname} onChange={this.handleChange} required autoFocus/>
             <br/>
 
-            <label htmlFor="lastname">What is your last name?</label>
+            <label htmlFor="lastname">Last Name</label>
             <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname} onChange={this.handleChange} required autoFocus/>
             <br/>
-            
-            <div className="form-group">
-            <label htmlFor="pronouns">What gender do you identify as?</label>
-            <select name="pronouns" id="pronouns" className="form-control" value={this.state.pronouns} onChange={this.handleChange} >
-            <option>Male</option>
-            <option>Female</option>
-            <option>Non-binary</option>
-            </select>
-            </div>
-            <br/>
 
 
             <div className="form-group">
-            <label htmlFor="shirtsize">What is your shirt size?</label>
+            <label htmlFor="shirtsize">Shirt Size</label>
             <select name="shirtsize" id="shirtsize" className="form-control" value={this.state.shirtsize} onChange={this.handleChange} >
             <option>XXS</option>
             <option>XS</option>
@@ -135,6 +125,16 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-group">
+            <label htmlFor="pronouns">What are your preferred pronouns?</label>
+            <select name="pronouns" id="pronouns" className="form-control" value={this.state.pronouns} onChange={this.handleChange} >
+            <option>She/Her</option>
+            <option>He/Him</option>
+            <option>They/Them</option>
+            </select>
+            </div>
+            <br/>
+
+            <div className="form-group">
             <label htmlFor="ethnicity">How do you ethnically identify?</label>
             <select name="ethnicity" id="ethnicity" className="form-control" value={this.state.ethnicity} onChange={this.handleChange} >
             <option>American Indian or Alaskan Native</option>
@@ -168,7 +168,13 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Please upload a copy of your resume</label>
+            <label htmlFor="accomodations">We want all of our hackers to be as rowdy as possible! Are there any other accommodations you might need?</label>
+            <textarea name="accomodations" id="accomodations" className="form-control" rows="3" value={this.state.accomodations} onChange={this.handleChange} ></textarea>
+            </div>
+            <br/>
+
+            <div className="form-group">
+            <label htmlFor="exampleFormControlFile1">Please Upload a copy of your resume</label>
             <input name="file" type="file" className="form-control-file" id="exampleFormControlFile1"/>
             </div>
             <br/>
@@ -183,29 +189,9 @@ class ApplicationForm extends React.Component {
             </select>
             </div>
             <br/>
-            
-            <div className="form-group">
-            <label htmlFor="techjoke">We want all of our hackers to be as rowdy as possible! What is your best tech joke?</label>
-            <textarea name="techjoke" id="lookingforwardto" className="form-control" rows="3" value={this.state.techjoke} onChange={this.handleChange} ></textarea>
-            </div>
-            <br/>
-            
-            <div className="form-group">
-            <label htmlFor="travel">How did you first hear about RowdyHacks?</label>
-            <select name="travel" id="travel" className="form-control" value={this.state.travel} onChange={this.handleChange} >
-            <option>Major League Hacking</option>
-            <option>Social Media</option>
-            <option>ACM Meeting</option>
-            <option>Campus Flyer/Banner</option>
-            <option>Instructor</option>
-            <option>Friend</option>
-            <option>Other</option>
-            </select>
-            </div>
-            <br/>
 
             <div className="form-group">
-            <label htmlFor="lookingforwardto">Why do you want to attend RowdyHacks?</label>
+            <label htmlFor="lookingforwardto">What are you looking forward to about RowdyHacks this year?</label>
             <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto} onChange={this.handleChange} ></textarea>
             </div>
             <br/>
@@ -233,83 +219,5 @@ class ApplicationForm extends React.Component {
             </div>
             </div>
         );
-    }
-}
-
-const statusDisplay = (
-    <div className="card shadow bg-white rounded">
-    <div className="card-body">
-    <h2> Your application has been received! </h2>
-    You may check the status of your application at any time here. Once a decision has been made you will receive an email.
-    <br/>
-    <br/>
-    <button type="button" className="btn btn-primary" onClick={editApplication}>Edit Application</button>
-    <small id="emailHelp" className="form-text text-muted">For support please contact: team@rowdyhacks.org</small>
-    </div>
-    </div>
-);
-
-
-var data = {
-    UserPoolId : 'us-east-1_0EX0SzGKU',
-    ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
-};
-
-var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
-
-var cognitoUser = userPool.getCurrentUser();
-if (cognitoUser != null) {
-    cognitoUser.getSession(function(err, session) {
-        if (err) {
-            window.location.replace("signin.html");
-        }
-    });
-} else {
-    window.location.replace("signin.html");
-}
-
-document.body.innerHTML = document.body.innerHTML.replace(/\{username\}/g, cognitoUser.signInUserSession.idToken.payload.email);
-
-var UserInfo = null;
-
-fetch('https://api.rowdyhacks.io/v1/search', {
-    method: 'POST',
-    body: JSON.stringify({"accessToken": cognitoUser.signInUserSession.accessToken.jwtToken}),
-    headers: {Accept: 'application/json','Content-Type': 'application/json'}
-    })
-    .then((response) => response.json())
-    .then(responseJson=>{
-        if(responseJson['body']['Item']){
-            UserInfo = responseJson['body']['Item'];
-            ReactDOM.render(statusDisplay, document.getElementById('root'));
-        }else{
-            const element = <ApplicationForm/>;
-            ReactDOM.render(element, document.getElementById('root'));
-        }
-    });
-
-function editApplication(){
-    console.log(UserInfo);
-    var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
-    lastname={UserInfo.lastname.S} 
-    shirtsize={UserInfo.shirtsize.S} 
-    school={UserInfo.school.S} 
-    major={UserInfo.major.S} 
-    classification={UserInfo.classification.S} 
-    pronouns={UserInfo.pronouns.S} 
-    ethnicity={UserInfo.ethnicity.S} 
-    travel={UserInfo.travel.S} 
-    dietaryinfo={UserInfo.dietaryinfo.S} 
-    accomodations={UserInfo.accomodations.S} 
-    track={UserInfo.track.S} 
-    lookingforwardto={UserInfo.lookingforwardto.S}/>;
-    ReactDOM.render(editForm, document.getElementById('root'));
-}
-
-function logout(){
-    var cognitoUser = userPool.getCurrentUser();
-    if (cognitoUser != null) {
-        cognitoUser.signOut();
-        window.location.replace("signin.html");
     }
 }
