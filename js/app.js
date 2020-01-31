@@ -16,7 +16,8 @@ class ApplicationForm extends React.Component {
             track:props.track,
             joke: props.joke,
             firsthear: props.firsthear,
-            lookingforwardto: props.lookingforwardto
+            lookingforwardto: props.lookingforwardto,
+            isResubmit: props.isResubmit
         }
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -59,7 +60,21 @@ class ApplicationForm extends React.Component {
             crossDomain: true,
             contentType: 'application/json',
             success: function (data) {
-                window.location.replace("index.html");
+                console.log(data['body']);
+                var file = $("#file")[0].files[0];
+                if(file){
+                    console.log("UploadingFile");
+                }
+                $.ajax({
+                type: 'PUT',
+                url: data['body'],
+                headers: {"Content-Type": "application/pdf"},
+                processData: false,
+                data: file,
+                success: function () {
+                    window.location.replace("index.html");
+                }
+            });
             }
         });
         const data = new FormData(event.target);
@@ -71,7 +86,15 @@ class ApplicationForm extends React.Component {
             <div className="card-body">
             <form className="form" onSubmit={this.handleSubmit}>
             <div id="errorMessage"></div>
-            <small id="emailHelp" className="form-text text-muted">Our records indicate you have not submitted an application! Please fill out and submit the form below to apply.</small>
+            
+            
+            {this.state.isResubmit == true ?
+                <div>
+                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(statusDisplay, document.getElementById('root'))}>Cancel Edit</button>
+                </div>
+                : 
+                <small id="emailHelp" className="form-text text-muted">Our records indicate you have not submitted an application! Please fill out and submit the form below to apply.</small>}
+          
             <br/>
 
             <h1 className="h3 mb-3 font-weight-normal">RowdyHacks 2020 Application</h1>
@@ -170,8 +193,8 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Please upload a copy of your resume</label>
-            <input name="file" type="file" className="form-control-file" id="exampleFormControlFile1"/>
+            <label htmlFor="exampleFormControlFile1">Please upload a copy of your resume. (pdf only)</label>
+            <input name="file" type="file" id="file" className="form-control-file"/>
             </div>
             <br/>
 
@@ -306,7 +329,9 @@ function editApplication(){
     track={UserInfo.track.S} 
     joke={UserInfo.joke.S} 
     firsthear={UserInfo.firsthear.S} 
-    lookingforwardto={UserInfo.lookingforwardto.S}/>;
+    lookingforwardto={UserInfo.lookingforwardto.S}
+    isResubmit = {true}/>;
+
     ReactDOM.render(editForm, document.getElementById('root'));
 }
 
