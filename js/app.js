@@ -1,3 +1,75 @@
+var data = {
+    UserPoolId : 'us-east-1_0EX0SzGKU',
+    ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
+};
+
+var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
+
+var cognitoUser = userPool.getCurrentUser();
+if (cognitoUser != null) {
+    cognitoUser.getSession(function(err, session) {
+        if (err) {
+            window.location.replace("signin.html");
+        }
+    });
+} else {
+    window.location.replace("signin.html");
+}
+
+document.getElementById('navbarDropdownMenuLink').innerHTML = cognitoUser.signInUserSession.idToken.payload.email
+
+var UserInfo = null;
+
+fetch('https://api.rowdyhacks.io/v1/search', {
+    method: 'POST',
+    body: JSON.stringify({"accessToken": cognitoUser.signInUserSession.accessToken.jwtToken}),
+    headers: {Accept: 'application/json','Content-Type': 'application/json'}
+    })
+    .then((response) => response.json())
+    .then(responseJson=>{
+        if(responseJson['body']['Item']){
+            UserInfo = responseJson['body']['Item'];
+            var element = <StatusDisplay appstatus={UserInfo.appstatus.S}/>;
+            ReactDOM.render(element, document.getElementById('root'));
+        }else{
+            console.log(responseJson);
+            var element = <ApplicationForm/>;
+            ReactDOM.render(element, document.getElementById('root'));
+        }
+    });
+
+
+
+function editApplication(){
+    console.log(UserInfo);
+    
+    console.log(UserInfo.appstatus.S);
+    var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
+    lastname={UserInfo.lastname.S}
+    gender={UserInfo.gender.S} 
+    shirtsize={UserInfo.shirtsize.S} 
+    school={UserInfo.school.S} 
+    major={UserInfo.major.S} 
+    classification={UserInfo.classification.S} 
+    ethnicity={UserInfo.ethnicity.S} 
+    travel={UserInfo.travel.S} 
+    dietaryinfo={UserInfo.dietaryinfo.S} 
+    track={UserInfo.track.S} 
+    joke={UserInfo.joke.S} 
+    firsthear={UserInfo.firsthear.S} 
+    lookingforwardto={UserInfo.lookingforwardto.S}
+    isResubmit = {true}/>;
+
+    ReactDOM.render(editForm, document.getElementById('root'));
+}
+
+function logout(){
+    var cognitoUser = userPool.getCurrentUser();
+    if (cognitoUser != null) {
+        cognitoUser.signOut();
+        window.location.replace("signin.html");
+    }
+}
 
 class ApplicationForm extends React.Component {
     constructor(props) {
@@ -90,14 +162,15 @@ class ApplicationForm extends React.Component {
             
             {this.state.isResubmit == true ?
                 <div>
-                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(statusDisplay, document.getElementById('root'))}>Cancel Edit</button>
+                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(<StatusDisplay appstatus={UserInfo.appstatus.S}/>, document.getElementById('root'))}>Cancel Edit</button>
                 </div>
                 : 
                 <small id="emailHelp" className="form-text text-muted">Our records indicate you have not submitted an application! Please fill out and submit the form below to apply.</small>}
           
             <br/>
 
-            <h1 className="h3 mb-3 font-weight-normal">RowdyHacks 2020 Application</h1>
+            <h1 className="h3 mb-3 font-weight-normal text-center">RowdyHacks 2020 Application</h1>
+
 
             <label htmlFor="firstname">What is your first name?</label>
             <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname || ''} onChange={this.handleChange} required autoFocus/>
@@ -193,11 +266,11 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Please upload a copy of your resume. (pdf only)</label>
+            <label htmlFor="exampleFormControlFile1">Please upload a PDF copy of your resume.</label>
             <input name="file" type="file" id="file" className="form-control-file"/>
             </div>
             <br/>
-
+                
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
             <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} >
@@ -237,7 +310,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <div className="form-check">
-            <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+            <input className="form-check-input" type="checkbox" value="" id="defaultCheck1" required/>
             <label className="form-check-label" htmlFor="defaultCheck1">
             I have read and agree to the <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct.</a>
             </label>
@@ -246,14 +319,14 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-check">
-            <input className="form-check-input" type="checkbox" value="" id="defaultCheck2"/>
+            <input className="form-check-input" type="checkbox" value="" id="defaultCheck2" required/>
             <label className="form-check-label" htmlFor="defaultCheck2">
             I authorize you to share my application/registration information for event administration, ranking, MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons in-line with the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>. I further agree to the terms of both the <a href="https://github.com/MLH/mlh-policies/tree/master/prize-terms-and-conditions">MLH Contest Terms and Conditions</a> and the <a href="https://mlh.io/privacy">MLH Privacy Policy</a>.
             </label>
             </div>
             <br/>
-
-            <button className="btn btn-lg btn-primary btn-block" type="submit">Submit Application</button>
+            
+            <button className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>
             </form>
             </div>
             </div>
@@ -261,84 +334,47 @@ class ApplicationForm extends React.Component {
     }
 }
 
-const statusDisplay = (
-    <div className="card shadow bg-white rounded">
-    <div className="card-body">
-    <h2> Your application has been received! </h2>
-    You may check the status of your application at any time here. Once a decision has been made you will receive an email.
-    <br/>
-    <br/>
-    <button type="button" className="btn btn-primary" onClick={editApplication}>Edit Application</button>
-    <small id="emailHelp" className="form-text text-muted">For support please contact: team@rowdyhacks.org</small>
-    </div>
-    </div>
-);
-
-
-var data = {
-    UserPoolId : 'us-east-1_0EX0SzGKU',
-    ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
-};
-
-var userPool = new AmazonCognitoIdentity.CognitoUserPool(data);
-
-var cognitoUser = userPool.getCurrentUser();
-if (cognitoUser != null) {
-    cognitoUser.getSession(function(err, session) {
-        if (err) {
-            window.location.replace("signin.html");
+class StatusDisplay extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            appstatus: props.appstatus
         }
-    });
-} else {
-    window.location.replace("signin.html");
-}
-
-document.body.innerHTML = document.body.innerHTML.replace(/\{username\}/g, cognitoUser.signInUserSession.idToken.payload.email);
-
-var UserInfo = null;
-
-fetch('https://api.rowdyhacks.io/v1/search', {
-    method: 'POST',
-    body: JSON.stringify({"accessToken": cognitoUser.signInUserSession.accessToken.jwtToken}),
-    headers: {Accept: 'application/json','Content-Type': 'application/json'}
-    })
-    .then((response) => response.json())
-    .then(responseJson=>{
-        if(responseJson['body']['Item']){
-            UserInfo = responseJson['body']['Item'];
-            ReactDOM.render(statusDisplay, document.getElementById('root'));
-        }else{
-            console.log(responseJson);
-            const element = <ApplicationForm/>;
-            ReactDOM.render(element, document.getElementById('root'));
-        }
-    });
-
-function editApplication(){
-    console.log(UserInfo);
-    var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
-    lastname={UserInfo.lastname.S}
-    gender={UserInfo.gender.S} 
-    shirtsize={UserInfo.shirtsize.S} 
-    school={UserInfo.school.S} 
-    major={UserInfo.major.S} 
-    classification={UserInfo.classification.S} 
-    ethnicity={UserInfo.ethnicity.S} 
-    travel={UserInfo.travel.S} 
-    dietaryinfo={UserInfo.dietaryinfo.S} 
-    track={UserInfo.track.S} 
-    joke={UserInfo.joke.S} 
-    firsthear={UserInfo.firsthear.S} 
-    lookingforwardto={UserInfo.lookingforwardto.S}
-    isResubmit = {true}/>;
-
-    ReactDOM.render(editForm, document.getElementById('root'));
-}
-
-function logout(){
-    var cognitoUser = userPool.getCurrentUser();
-    if (cognitoUser != null) {
-        cognitoUser.signOut();
-        window.location.replace("signin.html");
+    }
+    
+    render() {
+        return (
+            <div className="card shadow bg-white rounded">
+            <div className="card-body">
+            { this.state.appstatus === "APPLIED" ?
+                <div>
+                <h1 className="text-center"> Thank you Joseph! </h1>
+                <h2 className="text-center"> Your application has been received</h2>
+                
+                <br/>
+                <p className="text-center">You may check the status of your application at any time here. Once a decision has been made you will receive an email with further instructions.</p>
+                <br/>
+                <div className="col text-center">
+                <button type="button" className="btn btn-primary btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Edit Application</button>
+                </div>
+                </div> 
+             :
+                <div>
+                <h1 className="text-center"> Congratulations Joseph!</h1>
+                <h2 className="text-center"> You have been accepted to RowdyHacks 2020 </h2>
+                <br/>
+                <p className="text-center">We are so excited to have you! Please RSVP for the event below to confirm your attendance.</p>
+                <br/>
+                <div class="col text-center">
+                <button type="button" className="btn btn-success btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>RSVP</button>
+                </div>
+                </div>
+            }
+            <div className="col text-center">
+            <small id="emailHelp" className="form-text text-muted">For support please contact: team@rowdyhacks.org</small>
+            </div>
+            </div>
+            </div>
+        );
     }
 }
