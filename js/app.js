@@ -29,7 +29,7 @@ fetch('https://api.rowdyhacks.io/v1/search', {
     .then(responseJson=>{
         if(responseJson['body']['Item']){
             UserInfo = responseJson['body']['Item'];
-            var element = <StatusDisplay appstatus={UserInfo.appstatus.S}/>;
+            var element = <StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S}/>;
             ReactDOM.render(element, document.getElementById('root'));
         }else{
             console.log(responseJson);
@@ -38,11 +38,8 @@ fetch('https://api.rowdyhacks.io/v1/search', {
         }
     });
 
-
-
 function editApplication(){
     console.log(UserInfo);
-    
     console.log(UserInfo.appstatus.S);
     var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
     lastname={UserInfo.lastname.S}
@@ -162,7 +159,7 @@ class ApplicationForm extends React.Component {
             
             {this.state.isResubmit == true ?
                 <div>
-                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(<StatusDisplay appstatus={UserInfo.appstatus.S}/>, document.getElementById('root'))}>Cancel Edit</button>
+                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(<StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S}/>, document.getElementById('root'))}>Cancel Edit</button>
                 </div>
                 : 
                 <small id="emailHelp" className="form-text text-muted">Our records indicate you have not submitted an application! Please fill out and submit the form below to apply.</small>}
@@ -171,7 +168,7 @@ class ApplicationForm extends React.Component {
 
             <h1 className="h3 mb-3 font-weight-normal text-center">RowdyHacks 2020 Application</h1>
 
-
+                                                                                                                                                                                                                                      
             <label htmlFor="firstname">What is your first name?</label>
             <input name="firstname" id="firstname" className="form-control" placeholder="First Name" value={this.state.firstname || ''} onChange={this.handleChange} required autoFocus/>
             <br/>
@@ -267,7 +264,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="exampleFormControlFile1">Please upload a PDF copy of your resume.</label>
-            <input name="file" type="file" id="file" className="form-control-file"/>
+            <input name="file" type="file" id="file" className="form-control-file" required/>
             </div>
             <br/>
                 
@@ -338,7 +335,8 @@ class StatusDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            appstatus: props.appstatus
+            appstatus: props.appstatus,
+            firstname: props.firstname
         }
     }
     
@@ -348,33 +346,191 @@ class StatusDisplay extends React.Component {
             <div className="card-body">
             { this.state.appstatus === "APPLIED" ?
                 <div>
-                <h1 className="text-center"> Thank you Joseph! </h1>
-                <h2 className="text-center"> Your application has been received</h2>
-                
-                <br/>
-                <p className="text-center">You may check the status of your application at any time here. Once a decision has been made you will receive an email with further instructions.</p>
-                <br/>
-                <div className="col text-center">
-                <button type="button" className="btn btn-primary btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Edit Application</button>
-                </div>
+                    <h1 className="text-center"> Thank you {this.state.firstname}! </h1>
+                    <h2 className="text-center"> Your application has been received</h2>
+                    <br/>
+                    <p className="text-center">You may check the status of your application at any time here. Once a decision has been made you will receive an email with further instructions.</p>
+                    <div className="col text-center">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="stepper stepper-horizontal">
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">1</span>
+                                        <span className="label">Applied</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">2</span>
+                                        <span className="label">Accepted</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">3</span>
+                                        <span className="label">RSVP</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">4</span>
+                                        <span className="label">Checked In</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button type="button" className="btn btn-primary btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Edit Application</button>
+                    </div>
                 </div> 
-             :
+            : this.state.appstatus === "ACCEPTED" ?
                 <div>
-                <h1 className="text-center"> Congratulations Joseph!</h1>
-                <h2 className="text-center"> You have been accepted to RowdyHacks 2020 </h2>
-                <br/>
-                <p className="text-center">We are so excited to have you! Please RSVP for the event below to confirm your attendance.</p>
-                <br/>
-                <div class="col text-center">
-                <button type="button" className="btn btn-success btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>RSVP</button>
+                    <h1 className="text-center"> Congratulations {this.state.firstname}!</h1>
+                    <h2 className="text-center"> You have been accepted to RowdyHacks 2020 </h2>
+                    <br/>
+                     <p className="text-center">We are so excited to have you join us in March! Please RSVP for the event below to confirm your attendance.</p>
+                    <div className="col text-center">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="stepper stepper-horizontal">
+                                    <li className="completed">
+                                        <a href="#!">
+                                        <span className="circle">1</span>
+                                        <span className="label">Applied</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">2</span>
+                                        <span className="label">Accepted</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">3</span>
+                                        <span className="label">RSVP</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">4</span>
+                                        <span className="label">Checked In</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm">
+                                <button type="button" className="btn btn-success btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>RSVP</button>
+                            </div>
+                            <div className="col-sm">
+                                <button type="button" className="btn btn-danger btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Decline Invitation</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            : this.state.appstatus === "RSVP" ?
+                <div>
+                    <h1 className="text-center"> Thank You {this.state.firstname}!</h1>
+                    <h2 className="text-center"> Your participation at RowdyHacks 2020 is confirmed!</h2>
+                    <br/>
+                    <p className="text-center">We are so excited to have you join us at RowdyHacks 2020! We will send you all future information about the event with the email you provided.</p>
+                    <div className="col text-center">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="stepper stepper-horizontal">
+                                    <li className="completed">
+                                        <a href="#!">
+                                        <span className="circle">1</span>
+                                        <span className="label">Applied</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">2</span>
+                                        <span className="label">Accepted</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">3</span>
+                                        <span className="label">RSVP</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">4</span>
+                                        <span className="label">Checked In</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p className="text-center">Please save the image below on your phone. We will be using it to sign you in.</p>
+                        <img src="https://miro.medium.com/max/1424/1*sHmqYIYMV_C3TUhucHrT4w.png" className="img-thumbnail" alt="Responsive image" style={{height:'300px'}}/>
+                    </div>
                 </div>
-            }
-            <div className="col text-center">
+        : this.state.appstatus === "CHECKEDIN" ?
+            <div>
+                    <h1 className="text-center"> Welcome {this.state.firstname}!</h1>
+                    <h2 className="text-center">We are so excited to have you join us!</h2>
+                    <div className="col text-center">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="stepper stepper-horizontal">
+                                    <li className="completed">
+                                        <a href="#!">
+                                        <span className="circle">1</span>
+                                        <span className="label">Applied</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">2</span>
+                                        <span className="label">Accepted</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">3</span>
+                                        <span className="label">RSVP</span>
+                                        </a>
+                                    </li>
+
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">4</span>
+                                        <span className="label">Checked In</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p className="text-center">Please save the image below on your phone.</p>
+                        <img src="https://miro.medium.com/max/1424/1*sHmqYIYMV_C3TUhucHrT4w.png" className="img-thumbnail" alt="Responsive image" style={{height:'300px'}}/>
+                    </div>
+                </div>
+            :null
+        }
+        <div className="col text-center">
             <small id="emailHelp" className="form-text text-muted">For support please contact: team@rowdyhacks.org</small>
-            </div>
-            </div>
-            </div>
-        );
+        </div>
+        </div>
+        </div>
+    
+          );
     }
 }
