@@ -9,12 +9,16 @@
         <title>RowdyHacks 2020</title>
         <!-- Bootstrap core CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.0/css/mdb.min.css" rel="stylesheet">
     </head>
-    <body class="text-center" style="background-color: #F2F2F2;">
-        <div class="alert alert-primary" role="alert">
-            Closed Beta
-        </div>
-        <div class="container" style="width: 100%; max-width: 450px; padding: 15px;">
+    <body class="text-center" style="background-color: #F2F2F2;" id="epicbackgrounddisplaything">
+        <div style="min-height: 100%; min-height: 100vh; display: flex; align-items: center;" id="view">
+        <div class="container" style="width: 100%; max-width: 450px; padding: 15px; top: 100px">
             <div class="card shadow bg-white rounded">
                 <img class="mb-12" src="res/AbstractRowdy.png" alt="" width="100" height="100" style="display: block; margin: auto; margin-top: 5%;">
                 <div class="card-body">
@@ -37,6 +41,7 @@
                 <p class="mt-4 mb-2 text-muted">&copy; RowdyHacks - 2020</p>
             </div>
         </div>
+        </div>
         <!-- Bootstrap core JavaScript ================================================== -->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -44,5 +49,22 @@
         <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
         <script src="js/amazon-cognito-identity.min.js"></script>
         <script src="js/signin.js"></script>
+        <script src="js/three.r95.min.js"></script>
+        <script src="js/vanta.net.min.js"></script>
+        <script>
+        VANTA.NET({
+            el: "#epicbackgrounddisplaything",
+            mouseControls: false,
+            touchControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            backgroundColor: 0x0c2340,
+            points: 20.00,
+            color: 0xf15a22
+        })
+        </script>
     </body>
 </html>
+

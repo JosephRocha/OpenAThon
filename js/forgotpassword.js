@@ -13,7 +13,7 @@ class ChangePasswordForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    var username = jQuery("#username").val();
+    var username = jQuery("#username").val().toLowerCase();
 
     var poolData = {
         UserPoolId : 'us-east-1_0EX0SzGKU',

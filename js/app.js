@@ -32,15 +32,12 @@ fetch('https://api.rowdyhacks.io/v1/search', {
             var element = <StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S}/>;
             ReactDOM.render(element, document.getElementById('root'));
         }else{
-            console.log(responseJson);
             var element = <ApplicationForm/>;
             ReactDOM.render(element, document.getElementById('root'));
         }
     });
 
 function editApplication(){
-    console.log(UserInfo);
-    console.log(UserInfo.appstatus.S);
     var editForm = <ApplicationForm firstname={UserInfo.firstname.S}
     lastname={UserInfo.lastname.S}
     gender={UserInfo.gender.S} 
@@ -104,6 +101,13 @@ class ApplicationForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        $('#submitButton').prop('disabled', true);
+        const element = (
+                         <div>
+                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Submitting...
+                        </div>
+        );
+       ReactDOM.render(element, document.getElementById('submitButton'));
 
         $.ajax({
             url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/user",
@@ -129,11 +133,7 @@ class ApplicationForm extends React.Component {
             crossDomain: true,
             contentType: 'application/json',
             success: function (data) {
-                console.log(data['body']);
                 var file = $("#file")[0].files[0];
-                if(file){
-                    console.log("UploadingFile");
-                }
                 $.ajax({
                 type: 'PUT',
                 url: data['body'],
@@ -323,7 +323,7 @@ class ApplicationForm extends React.Component {
             </div>
             <br/>
             
-            <button className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>
+            <button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>
             </form>
             </div>
             </div>
@@ -348,7 +348,6 @@ class StatusDisplay extends React.Component {
                 <div>
                     <h1 className="text-center"> Thank you {this.state.firstname}! </h1>
                     <h2 className="text-center"> Your application has been received</h2>
-                    <br/>
                     <p className="text-center">You may check the status of your application at any time here. Once a decision has been made you will receive an email with further instructions.</p>
                     <div className="col text-center">
                         <div className="row">
@@ -391,8 +390,7 @@ class StatusDisplay extends React.Component {
                 <div>
                     <h1 className="text-center"> Congratulations {this.state.firstname}!</h1>
                     <h2 className="text-center"> You have been accepted to RowdyHacks 2020 </h2>
-                    <br/>
-                     <p className="text-center">We are so excited to have you join us in March! Please RSVP for the event below to confirm your attendance.</p>
+                    <p className="text-center">We are so excited to have you join us in March! Please RSVP for the event below to confirm your attendance.</p>
                     <div className="col text-center">
                         <div className="row">
                             <div className="col-md-12">
@@ -441,7 +439,6 @@ class StatusDisplay extends React.Component {
                 <div>
                     <h1 className="text-center"> Thank You {this.state.firstname}!</h1>
                     <h2 className="text-center"> Your participation at RowdyHacks 2020 is confirmed!</h2>
-                    <br/>
                     <p className="text-center">We are so excited to have you join us at RowdyHacks 2020! We will send you all future information about the event with the email you provided.</p>
                     <div className="col text-center">
                         <div className="row">
@@ -482,7 +479,7 @@ class StatusDisplay extends React.Component {
                     </div>
                 </div>
         : this.state.appstatus === "CHECKEDIN" ?
-            <div>
+                <div>
                     <h1 className="text-center"> Welcome {this.state.firstname}!</h1>
                     <h2 className="text-center">We are so excited to have you join us!</h2>
                     <div className="col text-center">
@@ -530,7 +527,6 @@ class StatusDisplay extends React.Component {
         </div>
         </div>
         </div>
-    
           );
     }
 }

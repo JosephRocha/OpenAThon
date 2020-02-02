@@ -1,6 +1,6 @@
 $('form').submit(function (event) {
   event.preventDefault();
-  var username = jQuery("#username").val().toLowerCase();;
+  var username = jQuery("#username").val().toLowerCase();
   var password = jQuery("#password").val();
 
   var authenticationData = {
