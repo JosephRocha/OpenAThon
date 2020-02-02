@@ -15,7 +15,9 @@ if (cognitoUser != null) {
 } else {
     window.location.replace("signin.html");
 }
-
+if(cognitoUser.signInUserSession == null){
+    window.location.replace("signin.html");
+}
 document.getElementById('navbarDropdownMenuLink').innerHTML = cognitoUser.signInUserSession.idToken.payload.email
 
 var UserInfo = null;
@@ -128,11 +130,13 @@ class ApplicationForm extends React.Component {
                                            "joke": jQuery("#joke").val(),
                                            "firsthear": jQuery("#firsthear").val(),
                                            "lookingforwardto": jQuery("#lookingforwardto").val(),
+                                           "email": cognitoUser.signInUserSession.idToken.payload.email
                                           }}),
             datatype: "json",
             crossDomain: true,
             contentType: 'application/json',
             success: function (data) {
+                console.log(data);
                 var file = $("#file")[0].files[0];
                 $.ajax({
                 type: 'PUT',
@@ -270,7 +274,7 @@ class ApplicationForm extends React.Component {
                 
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
-            <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} >
+            <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} required>
             <option>Learner</option>
             <option>Security</option>
             <option>Social Good</option>
@@ -281,13 +285,13 @@ class ApplicationForm extends React.Component {
             
             <div className="form-group">
             <label htmlFor="joke">We want all of our hackers to be as rowdy as possible! Tell us your best tech joke.</label>
-            <textarea name="joke" id="joke" className="form-control" rows="3" value={this.state.joke || ''} onChange={this.handleChange} ></textarea>
+            <textarea name="joke" id="joke" className="form-control" rows="3" value={this.state.joke || ''} onChange={this.handleChange}></textarea>
             </div>
             <br/>
             
             <div className="form-group">
             <label htmlFor="firsthear">How did you first hear about RowdyHacks?</label>
-            <select name="firsthear" id="firsthear" className="form-control" value={this.state.firsthear || ""} onChange={this.handleChange} >
+            <select name="firsthear" id="firsthear" className="form-control" value={this.state.firsthear || ""} onChange={this.handleChange} required>
             <option>Major League Hacking</option>
             <option>Social Media</option>
             <option>ACM Meeting</option>
@@ -301,7 +305,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="lookingforwardto">Why do you want to attend RowdyHacks?</label>
-            <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto || ''} onChange={this.handleChange} ></textarea>
+            <textarea name="lookingforwardto" id="lookingforwardto" className="form-control" rows="3" value={this.state.lookingforwardto || ''} onChange={this.handleChange}></textarea>
             </div>
             <br/>
 
