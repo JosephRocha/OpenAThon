@@ -9,14 +9,14 @@ var cognitoUser = userPool.getCurrentUser();
 if (cognitoUser != null) {
     cognitoUser.getSession(function(err, session) {
         if (err) {
-            window.location.replace("signin.html");
+            window.location.replace("login.html");
         }
     });
 } else {
-    window.location.replace("signin.html");
+    window.location.replace("login.html");
 }
 if(cognitoUser.signInUserSession == null){
-    window.location.replace("signin.html");
+    window.location.replace("login.html");
 }
 document.getElementById('navbarDropdownMenuLink').innerHTML = cognitoUser.signInUserSession.idToken.payload.email
 
@@ -54,6 +54,8 @@ function editApplication(){
     joke={UserInfo.joke.S} 
     firsthear={UserInfo.firsthear.S} 
     lookingforwardto={UserInfo.lookingforwardto.S}
+    phonenumber={UserInfo.phonenumber.S}
+    hackathons={UserInfo.hackathons.S}
     isResubmit = {true}/>;
 
     ReactDOM.render(editForm, document.getElementById('root'));
@@ -63,7 +65,7 @@ function logout(){
     var cognitoUser = userPool.getCurrentUser();
     if (cognitoUser != null) {
         cognitoUser.signOut();
-        window.location.replace("signin.html");
+        window.location.replace("login.html");
     }
 }
 
@@ -85,6 +87,9 @@ class ApplicationForm extends React.Component {
             joke: props.joke,
             firsthear: props.firsthear,
             lookingforwardto: props.lookingforwardto,
+            phonenumber: props.phonenumber,
+            hackathons: props.hackathons,
+            age: props.age,
             isResubmit: props.isResubmit
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -95,7 +100,6 @@ class ApplicationForm extends React.Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
         this.setState({
             [name]: value
         });
@@ -107,7 +111,7 @@ class ApplicationForm extends React.Component {
         const element = (
                          <div>
                          <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Submitting...
-                        </div>
+                         </div>
         );
        ReactDOM.render(element, document.getElementById('submitButton'));
 
@@ -118,6 +122,7 @@ class ApplicationForm extends React.Component {
                                            "userId": cognitoUser.username,
                                            "firstname": jQuery("#firstname").val(),
                                            "lastname": jQuery("#lastname").val(),
+                                           "phonenumber": jQuery("#phonenumber").val(),
                                            "gender": jQuery("#gender").val(),
                                            "shirtsize": jQuery("#shirtsize").val(),
                                            "school": jQuery("#school").val(),
@@ -130,25 +135,50 @@ class ApplicationForm extends React.Component {
                                            "joke": jQuery("#joke").val(),
                                            "firsthear": jQuery("#firsthear").val(),
                                            "lookingforwardto": jQuery("#lookingforwardto").val(),
+                                           "hackathons": jQuery("#hackathons").val(),
+                                           "age": jQuery("#age").val(),
                                            "email": cognitoUser.signInUserSession.idToken.payload.email
                                           }}),
             datatype: "json",
             crossDomain: true,
             contentType: 'application/json',
             success: function (data) {
-                console.log(data);
                 var file = $("#file")[0].files[0];
-                $.ajax({
-                type: 'PUT',
-                url: data['body'],
-                headers: {"Content-Type": "application/pdf"},
-                processData: false,
-                data: file,
-                success: function () {
+                if(!file){
                     window.location.replace("index.html");
+                    return 
                 }
-            });
-            }
+                console.log("File is" + $("#file")[0].value);
+                $.ajax({
+                    type: 'PUT',
+                    url: data['body'],
+                    headers: {"Content-Type": "application/pdf"},
+                    processData: false,
+                    data: file,
+                    success: function () {
+                        window.location.replace("index.html");
+                    },
+                    error: function (err) {
+                        const element = (
+                        <div className="alert alert-danger" role="alert">
+                            <p>{data['errorMessage']}. Refresh the page and try again</p>
+                            <p>If the problem persists please contact team@rowdyhacks.org or text support at (210) 551 8620</p>
+                        </div>);
+                        ReactDOM.render(element, document.getElementById('errorMessage'));
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                }});
+            },
+            error: function (err) {
+                    const element = (
+                    <div className="alert alert-danger" role="alert">
+                        <p>Internal Server Error, Refresh the page and try again</p>
+                        <p>If the problem persists please contact team@rowdyhacks.org or text support at (210) 551 8620</p>
+                    </div>);
+                    ReactDOM.render(element, document.getElementById('errorMessage'));
+                    document.body.scrollTop = 0; // For Safari
+                    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                }
         });
         const data = new FormData(event.target);
     }
@@ -159,7 +189,6 @@ class ApplicationForm extends React.Component {
             <div className="card-body">
             <form className="form" onSubmit={this.handleSubmit}>
             <div id="errorMessage"></div>
-            
             
             {this.state.isResubmit == true ?
                 <div>
@@ -182,6 +211,17 @@ class ApplicationForm extends React.Component {
             <br/>
             
             <div className="form-group">
+            <label htmlFor="age">What is your age range?</label>
+            <select name="age" id="age" className="form-control" value={this.state.age || ''} onChange={this.handleChange} >
+            <option>18-24</option>
+            <option>25-30</option>
+            <option>31-40</option>
+            <option>40 and Older</option>
+            </select>
+            </div>
+            <br/>                                                                                                                  
+                                                                                                                   
+            <div className="form-group">
             <label htmlFor="gender">What gender do you identify as?</label>
             <select name="gender" id="gender" className="form-control" value={this.state.gender || ''} onChange={this.handleChange} >
             <option>Male</option>
@@ -190,7 +230,10 @@ class ApplicationForm extends React.Component {
             </select>
             </div>
             <br/>
-
+                                                                                                                          
+            <label htmlFor="phonenumber">What is your phone number?</label>
+            <input name="phonenumber" id="phonenumber" className="form-control" placeholder="123 456 7890" value={this.state.phonenumber || ''} onChange={this.handleChange} required autoFocus/>
+            <br/>                                                                                                                      
 
             <div className="form-group">
             <label htmlFor="shirtsize">What is your shirt size?</label>
@@ -242,6 +285,7 @@ class ApplicationForm extends React.Component {
             <option>Hispanic or Latino</option>
             <option>Native Hawaiian or other Pacific Islander</option>
             <option>White</option>
+            <option>Other</option>
             <option>Prefer not to answer</option>
             </select>
             </div>
@@ -267,17 +311,22 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Please upload a PDF copy of your resume.</label>
-            <input name="file" type="file" id="file" className="form-control-file" required/>
+            <label htmlFor="exampleFormControlFile1">Please upload a PDF copy of your resume to share it with our sponsors to have the opportunity to gain exposure and career opportunities.</label>
+            <input name="file" type="file" id="file" className="form-control-file" validate={this.state.isResubmit == true ? null : "required"}/>
             </div>
             <br/>
+                                                                                                                    
+            <div className="form-group">
+            <label htmlFor="hackathons">How many hackathons have you attended?</label>
+            <input name="hackathons" className="form-control" type="number" value="1234" id="hackathons" value={this.state.hackathons || ''} onChange={this.handleChange} required/>
+            </div>        
+            <br/>                                                                                                             
                 
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
             <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} required>
             <option>Learner</option>
             <option>Security</option>
-            <option>Social Good</option>
             <option>General</option>
             </select>
             </div>

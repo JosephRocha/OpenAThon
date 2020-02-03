@@ -17,29 +17,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.0/css/mdb.min.css" rel="stylesheet">
     </head>
     <body class="text-center" style="background-color: #F2F2F2;" id="epicbackgrounddisplaything">
-        <div style="min-height: 100%; min-height: 100vh; display: flex; align-items: center;" id="view">
-        <div class="container" style="width: 100%; max-width: 450px; padding: 15px; top: 100px">
-            <div class="card shadow bg-white rounded">
-                <img class="mb-12" src="res/AbstractRowdy.png" alt="" width="100" height="100" style="display: block; margin: auto; margin-top: 5%;">
-                <div class="card-body">
-                    <form class="form-signin">
-                        <div id="errorMessage"></div>
-                        <h1 class="h3 mb-3 font-weight-normal">RowdyHacks Sign In</h1>
-                        <label for="inputEmail" class="sr-only">Email</label>
-                        <input id="username" class="form-control" placeholder="Email" required autofocus>
-                        <br>
-                        <label for="inputPassword" class="sr-only">Password</label>
-                        <input type="password" id="password" class="form-control" placeholder="Password" required>
-                        <div class="checkbox mb-3">
-                        <p class="text-right"><a href="forgotpassword.html">Forgot password?</a></p>
-                        </div>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                    </form>
-                    <br>
-                    Don't have an account? <a href="register.html">Sign Up</a>
-                </div>
-                <p class="mt-4 mb-2 text-muted">&copy; RowdyHacks - 2020</p>
-            </div>
+        <div style="min-height: 100%; min-height: 100vh; display: flex; align-items: center;">
+        <div id="root" class="container" style="width: 100%; max-width: 450px; padding: 15px;">
         </div>
         </div>
         <!-- Bootstrap core JavaScript ================================================== -->
@@ -48,7 +27,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
         <script src="js/amazon-cognito-identity.min.js"></script>
-        <script src="js/signin.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script type="text/jsx" src="js/login.js"></script>
         <script src="js/three.r95.min.js"></script>
         <script src="js/vanta.net.min.js"></script>
         <script>
@@ -67,4 +49,3 @@
         </script>
     </body>
 </html>
-
