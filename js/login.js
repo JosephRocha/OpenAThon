@@ -47,8 +47,7 @@ class ChangePasswordForm extends React.Component {
                         <h1 className="h3 mb-3 font-weight-normal">Forgot Password</h1>
                         <label htmlFor="inputEmail" className="sr-only">Email</label>
                         <input id="username" className="form-control" placeholder="Email" required autoFocus/>
-                        <br/>
-                        <div className="checkbox mb-3"></div>
+                        <p className="text-right"><a href="#" onClick={(e) => ReactDOM.render(<SignInForm/>, document.getElementById('root'))}>Remembered Password</a></p>
                         <button className="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
                     </form>
                 </div>
