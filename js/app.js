@@ -148,7 +148,19 @@ class ApplicationForm extends React.Component {
                     window.location.replace("index.html");
                     return 
                 }
-                console.log("File is" + $("#file")[0].value);
+                var filename = $("#file")[0].value
+                if(!filename.endsWith(".pdf")){
+                    const element = (
+                        <div className="alert alert-danger" role="alert">
+                            <p>{data['errorMessage']}Resume must be in PDF form</p>
+                        </div>);
+                        ReactDOM.render(element, document.getElementById('errorMessage'));
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                        const button = (<button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>);
+                        ReactDOM.render(button, document.getElementById("buttonX"));
+                        return;
+                }
                 $.ajax({
                     type: 'PUT',
                     url: data['body'],
@@ -375,8 +387,9 @@ class ApplicationForm extends React.Component {
             </label>
             </div>
             <br/>
-            
+            <div id="buttonX">
             <button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>
+            </div>                                                                                                           
             </form>
             </div>
             </div>
