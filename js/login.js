@@ -139,6 +139,7 @@ class RegisterForm extends React.Component {
   }
 
   handleSubmit(event) {
+      event.preventDefault();
       var email = jQuery("#email").val().toLowerCase();
       var password = jQuery("#password").val();
       var confirmPassword = jQuery("#confirmPassword").val();
