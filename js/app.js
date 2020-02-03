@@ -207,7 +207,7 @@ class ApplicationForm extends React.Component {
             <br/>
 
             <label htmlFor="lastname">What is your last name?</label>
-            <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname || ''} onChange={this.handleChange} required autoFocus/>
+            <input name="lastname" id="lastname" className="form-control" placeholder="Last Name" value={this.state.lastname || ''} onChange={this.handleChange} required />
             <br/>
             
             <div className="form-group">
@@ -232,7 +232,7 @@ class ApplicationForm extends React.Component {
             <br/>
                                                                                                                           
             <label htmlFor="phonenumber">What is your phone number?</label>
-            <input name="phonenumber" id="phonenumber" className="form-control" placeholder="123 456 7890" value={this.state.phonenumber || ''} onChange={this.handleChange} required autoFocus/>
+            <input name="phonenumber" id="phonenumber" className="form-control" placeholder="123 456 7890" value={this.state.phonenumber || ''} onChange={this.handleChange} required />
             <br/>                                                                                                                      
 
             <div className="form-group">
@@ -253,13 +253,13 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="school">What school do you attend?</label>
-            <input name="school" id="school" className="form-control" placeholder="What school do you attend?" value={this.state.school || ''} onChange={this.handleChange}  required autoFocus/>
+            <input name="school" id="school" className="form-control" placeholder="What school do you attend?" value={this.state.school || ''} onChange={this.handleChange}  required />
             </div>
             <br/>
 
             <div className="form-group">
             <label htmlFor="major">What is your major?</label>
-            <input name="major" id="major" className="form-control" placeholder="What is your major?" value={this.state.major || ''} onChange={this.handleChange} required autoFocus/>
+            <input name="major" id="major" className="form-control" placeholder="What is your major?" value={this.state.major || ''} onChange={this.handleChange} required />
             </div>
             <br/>
 
