@@ -179,15 +179,24 @@ class ApplicationForm extends React.Component {
                         window.location.replace("index.html");
                     },
                     error: function (err) {
-                        const element = (
-                        <div className="alert alert-danger" role="alert">
-                            <p>{data['errorMessage']}. Refresh the page and try again</p>
-                            <p>If the problem persists please contact team@rowdyhacks.org or text support at (210) 551 8620</p>
-                        </div>);
-                        ReactDOM.render(element, document.getElementById('errorMessage'));
-                        document.body.scrollTop = 0; // For Safari
-                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-                }});
+                            $.ajax({
+                            type: 'PUT',
+                            url: data['body'],
+                            headers: {"Content-Type": "application/pdf"},
+                            processData: false,
+                            data: file,
+                            success: function () {
+                                window.location.replace("index.html");
+                            },
+                            error: function (err) {
+                                const element = (
+                                <div className="alert alert-danger" role="alert">
+                                    <p>{data['errorMessage']}. Your applicatoin has been submitted, however your resume could not be uploaded.</p>
+                                </div>);
+                                ReactDOM.render(element, document.getElementById('errorMessage'));
+                                document.body.scrollTop = 0; // For Safari
+                            }});}
+                });
             },
             error: function (err) {
                     const element = (
