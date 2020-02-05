@@ -324,7 +324,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="exampleFormControlFile1">Please upload a PDF copy of your resume to share it with our sponsors to have the opportunity to gain exposure and career opportunities.</label>
-            <input name="file" type="file" id="file" className="form-control-file" required/>
+            <input name="file" type="file" id="file" className="form-control-file" onChange={this.handleChange} required/>
             </div>
             <br/>
                                                                                                                     
