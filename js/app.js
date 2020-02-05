@@ -145,7 +145,15 @@ class ApplicationForm extends React.Component {
             success: function (data) {
                 var file = $("#file")[0].files[0];
                 if(!file){
-                    window.location.replace("index.html");
+                        const element = (
+                        <div className="alert alert-danger" role="alert">
+                            <p>{data['errorMessage']}You must submit a resume</p>
+                        </div>);
+                        ReactDOM.render(element, document.getElementById('errorMessage'));
+                        document.body.scrollTop = 0; // For Safari
+                        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+                        document.getElementById("submitButton").innerHTML = "Submit Application";
+                        document.getElementById("submitButton").disabled = false;
                     return 
                 }
                 var filename = $("#file")[0].value
@@ -157,8 +165,8 @@ class ApplicationForm extends React.Component {
                         ReactDOM.render(element, document.getElementById('errorMessage'));
                         document.body.scrollTop = 0; // For Safari
                         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-                        const button = (<button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>);
-                        ReactDOM.render(button, document.getElementById("buttonX"));
+                        document.getElementById("submitButton").innerHTML = "Submit Application";
+                        document.getElementById("submitButton").disabled = false;
                         return;
                 }
                 $.ajax({
@@ -324,7 +332,7 @@ class ApplicationForm extends React.Component {
 
             <div className="form-group">
             <label htmlFor="file">Please upload a PDF copy of your resume to share it with our sponsors to have the opportunity to gain exposure and career opportunities.</label>
-            <input name="file" type="file" id="file" className="form-control-file" onChange={this.handleChange} required/>
+            <input name="file" type="file" id="file" className="form-control-file" onChange={this.handleChange}/>
             </div>
             <br/>
                                                                                                                     
@@ -387,9 +395,7 @@ class ApplicationForm extends React.Component {
             </label>
             </div>
             <br/>
-            <div id="buttonX">
-            <button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>
-            </div>                                                                                                           
+            <button id="submitButton" className="btn btn-lg btn-primary btn-block " type="submit">Submit Application</button>                                                                                     
             </form>
             </div>
             </div>
