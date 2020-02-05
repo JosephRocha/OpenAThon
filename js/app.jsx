@@ -157,7 +157,7 @@ class ApplicationForm extends React.Component {
                     return 
                 }
                 var filename = $("#file")[0].value
-                if(!filename.toLowerCase().endsWith(".pdf")){
+                if(!filename.endsWith(".pdf")){
                     const element = (
                         <div className="alert alert-danger" role="alert">
                             <p>{data['errorMessage']}Resume must be in PDF form</p>
@@ -189,6 +189,18 @@ class ApplicationForm extends React.Component {
                                 window.location.replace("index.html");
                             },
                             error: function (err) {
+                                 $.ajax({type: 'POST',
+                                    url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/error",
+                                    datatype: "json",
+                                    crossDomain: true,
+                                    data: JSON.stringify({"body": {"error": JSON.stringify(err),
+                                                                   "firstname": jQuery("#firstname").val(),
+                                                                   "lastname": jQuery("#lastname").val(),
+                                                                  }}),
+                                    contentType: 'application/json',
+                                    success: function () {console.log("Success");},
+                                    error: function (err) {console.log("failure")}
+                                });
                                 const element = (
                                 <div className="alert alert-danger" role="alert">
                                     <p>{data['errorMessage']}. Your application has been submitted, however your resume could not be uploaded.</p>
