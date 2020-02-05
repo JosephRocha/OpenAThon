@@ -1,3 +1,18 @@
+$.ajax({type: 'POST',
+        url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/error",
+        datatype: "json",
+        crossDomain: true,
+        data: JSON.stringify({"body": {"error": "INFO",
+                                       "firstname": "UNKNOWN",
+                                       "lastname": "UNKNOWN",
+                                       "user-agent": navigator.userAgent,
+                                       "type": "INFO"
+                                      }}),
+        contentType: 'application/json',
+        success: function () {console.log("Success");},
+        error: function (err) {console.log("failure")}
+    });
+
 var data = {
     UserPoolId : 'us-east-1_0EX0SzGKU',
     ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
@@ -196,6 +211,8 @@ class ApplicationForm extends React.Component {
                                     data: JSON.stringify({"body": {"error": JSON.stringify(err),
                                                                    "firstname": jQuery("#firstname").val(),
                                                                    "lastname": jQuery("#lastname").val(),
+                                                                   "user-agent": navigator.userAgent,
+                                                                   "type": "ERROR"
                                                                   }}),
                                     contentType: 'application/json',
                                     success: function () {console.log("Success");},
