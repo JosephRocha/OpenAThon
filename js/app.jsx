@@ -191,7 +191,8 @@ class ApplicationForm extends React.Component {
                             error: function (err) {
                                 const element = (
                                 <div className="alert alert-danger" role="alert">
-                                    <p>{data['errorMessage']}. Your applicatoin has been submitted, however your resume could not be uploaded.</p>
+                                    <p>{data['errorMessage']}. Your application has been submitted, however your resume could not be uploaded.</p>
+                                    <p>Please email your resume to team@rowdyhacks.org to ensure that recruiters will receive it.</p>
                                 </div>);
                                 ReactDOM.render(element, document.getElementById('errorMessage'));
                                 document.body.scrollTop = 0; // For Safari
