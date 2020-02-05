@@ -157,7 +157,7 @@ class ApplicationForm extends React.Component {
                     return 
                 }
                 var filename = $("#file")[0].value
-                if(!filename.endsWith(".pdf")){
+                if(!filename.toLowerCase().endsWith(".pdf")){
                     const element = (
                         <div className="alert alert-danger" role="alert">
                             <p>{data['errorMessage']}Resume must be in PDF form</p>
