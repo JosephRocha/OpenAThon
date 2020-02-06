@@ -1,18 +1,3 @@
-$.ajax({type: 'POST',
-        url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/error",
-        datatype: "json",
-        crossDomain: true,
-        data: JSON.stringify({"body": {"error": "INFO",
-                                       "firstname": "UNKNOWN",
-                                       "lastname": "UNKNOWN",
-                                       "user-agent": navigator.userAgent,
-                                       "type": "INFO"
-                                      }}),
-        contentType: 'application/json',
-        success: function () {console.log("Success");},
-        error: function (err) {console.log("failure")}
-    });
-
 var data = {
     UserPoolId : 'us-east-1_0EX0SzGKU',
     ClientId : 'dosfp2tvj9r5d4u3ssn29gau6'
@@ -34,6 +19,22 @@ if(cognitoUser.signInUserSession == null){
     window.location.replace("login.html");
 }
 document.getElementById('navbarDropdownMenuLink').innerHTML = cognitoUser.signInUserSession.idToken.payload.email
+
+$.ajax({type: 'POST',
+        url: "https://ikx4tw4ty9.execute-api.us-east-1.amazonaws.com/dev/error",
+        datatype: "json",
+        crossDomain: true,
+        data: JSON.stringify({"body": {"error": "INFO",
+                                       "firstname": cognitoUser.signInUserSession.idToken.payload.email,
+                                       "lastname": cognitoUser.signInUserSession.idToken.payload.email,
+                                       "user-agent": navigator.userAgent,
+                                       "type": "INFO"
+                                      }}),
+        contentType: 'application/json',
+        success: function () {console.log("Success");},
+        error: function (err) {console.log("failure")}
+    });
+
 
 var UserInfo = null;
 
