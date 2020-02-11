@@ -384,6 +384,7 @@ class ApplicationForm extends React.Component {
                 
             <div className="form-group">
             <label htmlFor="track">What track are you most interested in joining?</label>
+            <p class="text-muted">The learners track is ideal for first time hackers. The general track is for experienced hackers. The cybersecurity track is for hackers interested in cybersecurity.</p>
             <select name="track" id="track" className="form-control" value={this.state.track || ''} onChange={this.handleChange} required>
             <option>Learner</option>
             <option>Security</option>
