@@ -47,7 +47,7 @@ fetch('https://api.rowdyhacks.io/v1/search', {
     .then(responseJson=>{
         if(responseJson['body']['Item']){
             UserInfo = responseJson['body']['Item'];
-            var element = <StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S}/>;
+            var element = <StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S} id={UserInfo.Id.S}/>;
             ReactDOM.render(element, document.getElementById('root'));
         }else{
             var element = <ApplicationForm/>;
@@ -252,7 +252,7 @@ class ApplicationForm extends React.Component {
             
             {this.state.isResubmit == true ?
                 <div>
-                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(<StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S}/>, document.getElementById('root'))}>Cancel Edit</button>
+                <button type="button" className="btn btn-danger" style={{float: 'right'}} onClick={(e) => ReactDOM.render(<StatusDisplay appstatus={UserInfo.appstatus.S} firstname={UserInfo.firstname.S} id={UserInfo.Id.S}/>, document.getElementById('root'))}>Cancel Edit</button>
                 </div>
                 : 
                 <small id="emailHelp" className="form-text text-muted">Our records indicate you have not submitted an application! Please fill out and submit the form below to apply.</small>}
@@ -449,7 +449,8 @@ class StatusDisplay extends React.Component {
         super(props);
         this.state = {
             appstatus: props.appstatus,
-            firstname: props.firstname
+            firstname: props.firstname,
+            id: props.id
         }
     }
     
@@ -587,8 +588,8 @@ class StatusDisplay extends React.Component {
                                 </ul>
                             </div>
                         </div>
-                        <p className="text-center">Please save the image below on your phone. We will be using it to sign you in.</p>
-                        <img src="https://miro.medium.com/max/1424/1*sHmqYIYMV_C3TUhucHrT4w.png" className="img-thumbnail" alt="Responsive image" style={{height:'300px'}}/>
+                        <p className="text-center">Please save the image below on your phone. We will be using it to sign you in quicker.</p>
+                        <img src={"https://api.qrserver.com/v1/create-qr-code/?size=350x350&data="+this.state.id} className="img-thumbnail" alt="Responsive image" style={{height:'300px'}}/>
                     </div>
                 </div>
         : this.state.appstatus === "CHECKEDIN" ?
