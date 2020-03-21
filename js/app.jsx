@@ -500,6 +500,48 @@ class StatusDisplay extends React.Component {
                         <button type="button" className="btn btn-primary btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Edit Application</button>
                     </div>
                 </div> 
+            : this.state.appstatus === "WAITLIST" ?
+                <div>
+                    <h1 className="text-center"> Thank you {this.state.firstname}! </h1>
+                    <h2 className="text-center"> You have been placed on the waitlist</h2>
+                    <p className="text-center">Unfortunately, we had to add you to a waitlist due to the volume of applications. If a spot open up you will receive an email with further instructions.</p>
+                    <div className="col text-center">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="stepper stepper-horizontal">
+                                    <li className="active">
+                                        <a href="#!">
+                                        <span className="circle">1</span>
+                                        <span className="label">Waitlisted</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">2</span>
+                                        <span className="label">Accepted</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">3</span>
+                                        <span className="label">RSVP</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#!">
+                                        <span className="circle">4</span>
+                                        <span className="label">Checked In</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button type="button" className="btn btn-primary btn-lg btn-block" style={{margin: "5px"}} onClick={editApplication}>Edit Application</button>
+                    </div>
+                </div> 
             : this.state.appstatus === "ACCEPTED" ?
                 <div>
                     <h1 className="text-center"> Congratulations {this.state.firstname}!</h1>
