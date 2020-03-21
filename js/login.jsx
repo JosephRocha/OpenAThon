@@ -300,7 +300,7 @@ class SignInForm extends React.Component {
                         <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                     </form>
                     <br/>
-                    Don't have an account? <a href="#" onClick={(e) => ReactDOM.render(<RegisterForm/>, document.getElementById('root'))}>Sign Up</a>
+                    RowdyHacks Registration is now closed. You can still apply if you have an account.
                 </div>
                 <p className="mt-4 mb-2 text-muted">&copy; RowdyHacks - 2020</p>
             </div>
